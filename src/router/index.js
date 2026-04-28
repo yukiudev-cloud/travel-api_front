@@ -7,7 +7,7 @@ const routes = [
 ]
 
 const router = createRouter({
-  history: createWebHashHistory(),
+  history: createWebHistory("/travel-api_front/"),
   routes,
 })
 

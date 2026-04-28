@@ -19,14 +19,7 @@
           @click="sharePlan"
           class="text-xs bg-emerald-500 text-white px-3 py-1 rounded"
         >
-          共有
-        </button>
-
-        <button
-          @click="reset"
-          class="text-xs bg-gray-200 px-3 py-1 rounded"
-        >
-          リセット
+          共有リンクをコピー
         </button>
       </div>
 
@@ -44,7 +37,7 @@
 
   const emit = defineEmits(["reset"])
 
-  const reset = () => {
-    emit("reset")
-  }
+//  const reset = () => {
+//    emit("reset")
+//  }
 </script>

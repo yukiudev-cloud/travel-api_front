@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory } from "vue-router"
+import { createRouter, createWebHashHistory } from "vue-router"
 
 const routes = [
   { path: "/", component: () => import("../pages/home.vue") },
@@ -7,8 +7,8 @@ const routes = [
 ]
 
 const router = createRouter({
-  history: createWebHistory("/travel-api_front/"),
-  routes,
+  history: createWebHashHistory(),
+  routes: routes
 })
 
 export default router

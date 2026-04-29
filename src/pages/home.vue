@@ -76,13 +76,6 @@
         >
           {{ loading ? "プラン思考中..." : "生成する" }}
         </button>
-        <div
-          v-if="toastMessage"
-          class="fixed top-24 right-16 text-white px-10 py-3 rounded-lg shadow-lg z-50"
-          :class="toastType === 'success' ? 'bg-emerald-500' : 'bg-red-500'"
-        >
-          {{ toastMessage }}
-        </div>
 
       </form>
       <!-- 結果 -->
@@ -156,11 +149,33 @@
   import { nextTick } from "vue";
   const API_URL = import.meta.env.VITE_API_URL
   const today = new Date().toISOString().split("T")[0];
-  const plan = ref([]);
   const loading = ref(false);
   import { usePlanStore } from "../stores/store"
-  const startDate = ref("");
-  const endDate = ref("");
+  import { useToast } from "../composables/useToast"
+
+  const { showToast } = useToast()
+  //親にデータ渡す
+  const store = usePlanStore()
+
+  const destination = computed({
+    get: () => store.destination,
+    set: (v) => store.destination = v
+  })
+
+  const plan = computed({
+    get: () => store.plan,
+    set: (v) => store.plan = v
+  })
+
+  const endDate = computed({
+    get: () => store.endDate,
+    set: (v) => store.endDate = v
+  })
+
+  const startDate = computed({
+    get: () => store.startDate,
+    set: (v) => store.startDate = v
+  })
 
   const days = computed(() => {
     if (!startDate.value || !endDate.value) return null;
@@ -175,18 +190,7 @@
     return days.value ? `${days.value}日間` : "";
   });
 
-  //メッセージ共通
-  const toastMessage = ref("");
-  const toastType = ref("error"); // "success" | "error"
 
-  const showToast = (msg, type = "error") => {
-    toastMessage.value = msg;
-    toastType.value = type;
-
-    setTimeout(() => {
-      toastMessage.value = "";
-    }, 3000);
-  };
 
   watch(
     () => plan.value,
@@ -205,22 +209,12 @@
     }
   );
 
-  //親にデータ渡す
-  const store = usePlanStore()
-
-  const destination = computed({
-    get: () => store.destination,
-    set: (v) => store.destination = v
-  })
-
-  store.plan = []
-    
   // 共有
   const encodePlan = (data) => {
-    return encodeURIComponent(
-      btoa(unescape(encodeURIComponent(JSON.stringify(data))))
-    );
-  };
+    return btoa(
+      encodeURIComponent(JSON.stringify(data))
+    )
+  }
 
   const copied = ref(false);
 
@@ -232,8 +226,11 @@
       plan: plan.value
     };
 
-    const encoded = encodePlan(payload);
-    const url = `${window.location.origin}${window.location.pathname}?data=${encoded}`;
+    const encoded = btoa(
+      encodeURIComponent(JSON.stringify(payload))
+    )
+
+    const url = `${window.location.origin}${window.location.pathname}?data=${encoded}`
 
     await navigator.clipboard.writeText(url);
 
@@ -242,27 +239,28 @@
 
   const decodePlan = (encoded) => {
     return JSON.parse(
-      decodeURIComponent(
-        escape(atob(decodeURIComponent(encoded)))
-      )
-    );
-  };
+      decodeURIComponent(atob(encoded))
+    )
+  }
 
   onMounted(() => {
-    const params = new URLSearchParams(window.location.search);
-    const encoded = params.get("data");
+    const params = new URLSearchParams(window.location.search)
+    const encoded = params.get("data")
 
     if (encoded) {
       try {
-        const decoded = decodePlan(encoded);
+        const decoded = JSON.parse(
+          decodeURIComponent(atob(encoded))
+        )
 
-        destination.value = decoded.destination || "";
-        startDate.value = decoded.startDate || "";
-        endDate.value = decoded.endDate || "";
-        plan.value = decoded.plan || []; // ←ここだけ配列を入れる
+        store.destination = decoded.destination || ""
+        store.startDate = decoded.startDate || ""
+        store.endDate = decoded.endDate || ""
+        store.plan = decoded.plan || []
+        store.days = days.value
 
       } catch (e) {
-        console.error("復元失敗", e);
+        console.error("復元失敗", e)
       }
     }
   });
@@ -322,7 +320,7 @@
     }
     loading.value = true;
     plan.value = [];
-    
+    store.days = days.value
     try {
       const res = await fetch(`${API_URL}/generate-plan`, {
         method: "POST",

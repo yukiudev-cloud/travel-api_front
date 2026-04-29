@@ -16,7 +16,7 @@
       <div class="flex gap-2">
         <button
           v-if="store.plan.length"
-          @click="emit('share')"
+          @click="share"
           class="text-xs bg-emerald-500 text-white px-3 py-1 rounded"
         >
           共有リンクをコピー
@@ -28,8 +28,32 @@
 </template>
 
 <script setup>
+  import { useToast } from "../composables/useToast"
+
+  const { toastMessage, toastType } = useToast()
   import { usePlanStore } from "../stores/store"
+
+  const { showToast } = useToast()
 
   const store = usePlanStore()
   const emit = defineEmits(["share"])
+  const share = async () => {
+    const payload = {
+      destination: store.destination,
+      startDate: store.startDate,
+      endDate: store.endDate,
+      plan: store.plan,
+      days: store.days
+    }
+
+    const encoded = btoa(
+      encodeURIComponent(JSON.stringify(payload))
+    )
+
+    const url = `${location.origin}${location.pathname}?data=${encoded}`
+
+    await navigator.clipboard.writeText(url)
+    showToast("コピーしました！", "success")
+  }
+
 </script>

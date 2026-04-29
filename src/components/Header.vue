@@ -8,15 +8,15 @@
       </h1>
 
       <!-- 中 -->
-      <div v-if="destination && days" class="text-sm text-gray-600">
-        {{ destination }} / {{ days }}日間
+      <div v-if="store.plan.length" class="text-sm text-gray-600">
+        {{ store.destination }} / {{ store.days }}日間
       </div>
 
       <!-- 右 -->
       <div class="flex gap-2">
         <button
-          v-if="plan.length"
-          @click="sharePlan"
+          v-if="store.plan.length"
+          @click="emit('share')"
           class="text-xs bg-emerald-500 text-white px-3 py-1 rounded"
         >
           共有リンクをコピー
@@ -28,16 +28,8 @@
 </template>
 
 <script setup>
-  defineProps({
-    destination: String,
-    days: Number,
-    plan: Array,
-    sharePlan: Function
-  })
+  import { usePlanStore } from "../stores/store"
 
-  const emit = defineEmits(["reset"])
-
-//  const reset = () => {
-//    emit("reset")
-//  }
+  const store = usePlanStore()
+  const emit = defineEmits(["share"])
 </script>

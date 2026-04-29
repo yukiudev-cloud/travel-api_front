@@ -1,11 +1,4 @@
 <template>
-  <Header
-    :destination="destination"
-    :days="days"
-    :plan="plan"
-    :sharePlan="sharePlan"
-    @reset="plan = []"
-  />
   <div class="min-h-screen bg-gray-100 flex flex-col items-stretch sm:items-center p-3 sm:p-6">
     <div class="w-full max-w-3xl mx-auto bg-white rounded-2xl shadow-xl p-3 sm:p-6">
       
@@ -153,25 +146,7 @@
       </div>
     </div>
   </div>
-  <footer class="bg-gray-100 border-t mt-10">
-    <div class="max-w-3xl mx-auto p-6 text-sm text-gray-600 flex flex-col sm:flex-row justify-between gap-4">
 
-      <div>
-        <p class="font-semibold text-gray-800">旅行プラン生成AI</p>
-        <p class="text-xs mt-1">AIで旅行プランを自動生成するサービス</p>
-      </div>
-      <div class="flex flex-col gap-2">
-        <a href="/" class="hover:underline">トップ</a>
-        <router-link to="/privacy">プライバシーポリシー</router-link>
-        <a href="/contact" class="hover:underline">お問い合わせ</a>
-      </div>
-
-    </div>
-
-    <div class="text-center text-xs text-gray-400 pb-4">
-      © 2026 Travel AI
-    </div>
-  </footer>
 </template>
 
 <script setup>
@@ -181,10 +156,9 @@
   import { nextTick } from "vue";
   const API_URL = import.meta.env.VITE_API_URL
   const today = new Date().toISOString().split("T")[0];
-  const destination = ref("");
   const plan = ref([]);
   const loading = ref(false);
-
+  import { usePlanStore } from "../stores/store"
   const startDate = ref("");
   const endDate = ref("");
 
@@ -214,20 +188,33 @@
     }, 3000);
   };
 
-  watch(plan, (newPlan) => {
-    if (newPlan.length > 0) {
-      const pageTitle = `${destination.value} ${days.value}日間モデルコース`;
-      document.title = pageTitle + " | 旅行プラン生成AI";
+  watch(
+    () => plan.value,
+    (newPlan) => {
+      if (newPlan.length > 0) {
+        const pageTitle = `${destination.value} ${days.value}日間モデルコース`
+        document.title = pageTitle + " | 旅行プラン生成AI"
 
-      const description = `${destination.value}の${days.value}日間の旅行プラン。観光・グルメ・移動を考慮した実用的なモデルコース。`;
+        const description = `${destination.value}の${days.value}日間の旅行プラン`
 
-      const meta = document.querySelector('meta[name="description"]');
-      if (meta) {
-        meta.setAttribute("content", description);
+        const meta = document.querySelector('meta[name="description"]')
+        if (meta) {
+          meta.setAttribute("content", description)
+        }
       }
     }
-  });
+  );
 
+  //親にデータ渡す
+  const store = usePlanStore()
+
+  const destination = computed({
+    get: () => store.destination,
+    set: (v) => store.destination = v
+  })
+
+  store.plan = []
+    
   // 共有
   const encodePlan = (data) => {
     return encodeURIComponent(
@@ -355,6 +342,9 @@
         return;
       } else {
         plan.value = data.plan;
+        store.destination = cleaned
+        store.days = days.value
+        store.plan = plan.value
         showToast("プラン生成 成功！！", "success");
         nextTick(() => {
           resultRef.value?.scrollIntoView({

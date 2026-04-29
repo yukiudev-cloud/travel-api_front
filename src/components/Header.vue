@@ -29,7 +29,7 @@
 
 <script setup>
   import { useToast } from "../composables/useToast"
-
+  import LZString from "lz-string"
   const { toastMessage, toastType } = useToast()
   import { usePlanStore } from "../stores/store"
 
@@ -39,18 +39,19 @@
   const emit = defineEmits(["share"])
   const share = async () => {
     const payload = {
-      destination: store.destination,
-      startDate: store.startDate,
-      endDate: store.endDate,
-      plan: store.plan,
-      days: store.days
+      d: store.destination,
+      s: store.startDate,
+      e: store.endDate,
+      p: store.plan
     }
 
-    const encoded = btoa(
-      encodeURIComponent(JSON.stringify(payload))
-    )
+  const encodePlan = (data) => {
+    const json = JSON.stringify(data)
 
-    const url = `${location.origin}${location.pathname}?data=${encoded}`
+    return LZString.compressToEncodedURIComponent(json)
+  }
+  const encoded = encodePlan(payload)
+  const url = `${location.origin}${location.pathname}?data=${encoded}`
 
     await navigator.clipboard.writeText(url)
     showToast("コピーしました！", "success")

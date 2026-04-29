@@ -143,6 +143,7 @@
 </template>
 
 <script setup>
+  import LZString from "lz-string"
   import Header from "../components/Header.vue"
   import { ref, computed, watch, onMounted } from "vue";
   import DayCard from "../components/DayCard.vue";
@@ -210,37 +211,9 @@
   );
 
   // 共有
-  const encodePlan = (data) => {
-    return btoa(
-      encodeURIComponent(JSON.stringify(data))
-    )
-  }
-
-  const copied = ref(false);
-
-  const sharePlan = async () => {
-    const payload = {
-      destination: destination.value,
-      startDate: startDate.value,
-      endDate: endDate.value,
-      plan: plan.value
-    };
-
-    const encoded = btoa(
-      encodeURIComponent(JSON.stringify(payload))
-    )
-
-    const url = `${window.location.origin}${window.location.pathname}?data=${encoded}`
-
-    await navigator.clipboard.writeText(url);
-
-    showToast("コピーしました！", "success");
-  };
-
   const decodePlan = (encoded) => {
-    return JSON.parse(
-      decodeURIComponent(atob(encoded))
-    )
+    const json = LZString.decompressFromEncodedURIComponent(encoded)
+    return JSON.parse(json)
   }
 
   onMounted(() => {
@@ -249,14 +222,12 @@
 
     if (encoded) {
       try {
-        const decoded = JSON.parse(
-          decodeURIComponent(atob(encoded))
-        )
+        const decoded = decodePlan(encoded)
 
-        store.destination = decoded.destination || ""
-        store.startDate = decoded.startDate || ""
-        store.endDate = decoded.endDate || ""
-        store.plan = decoded.plan || []
+        store.destination = decoded.d || ""
+        store.startDate = decoded.s || ""
+        store.endDate = decoded.e || ""
+        store.plan = decoded.p || []
         store.days = days.value
 
       } catch (e) {

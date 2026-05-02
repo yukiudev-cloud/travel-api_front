@@ -8,12 +8,13 @@
 
       <form @submit.prevent="generatePlan" class="space-y-3 mb-6">
         <!-- 行き先 -->
-        <label>
+        <label for="destination">
           行き先、プランなどを入力
         </label>
 
         <input
           v-model="destination"
+          id="destination"
           placeholder="行き先"
           class="w-full border rounded-lg p-2 bg-white text-black"
         />
@@ -33,6 +34,7 @@
                   <p class="text-xs text-gray-500 mb-1">出発</p>
                   <input
                     type="date"
+                    id="startDate"
                     v-model="startDate"
                     :min="today"
                     class="w-full border rounded-lg p-2 bg-white text-black"
@@ -48,6 +50,7 @@
                   <p class="text-xs text-gray-500 mb-1">帰宅</p>
                   <input
                     type="date"
+                    id="endDate"
                     v-model="endDate"
                     :min="today"
                     class="w-full border rounded-lg p-2 bg-white text-black"

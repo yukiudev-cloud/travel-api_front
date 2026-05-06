@@ -8,6 +8,9 @@
         <p class="text-xs text-gray-400 mt-4">
           ※当サイトは楽天アフィリエイトプログラムを利用しています
         </p>
+        <!-- Rakuten Web Services Attribution Snippet FROM HERE -->
+        <a href="https://developers.rakuten.com/" target="_blank">Supported by Rakuten Developers</a>
+        <!-- Rakuten Web Services Attribution Snippet TO HERE -->
       </div>
       <div class="flex flex-col gap-2">
         <router-link to="/">トップ</router-link>

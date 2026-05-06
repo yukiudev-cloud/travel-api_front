@@ -6,6 +6,9 @@ export const usePlanStore = defineStore("plan", {
     startDate: "",
     endDate: "",
     plan: [],
+    hotelArea: "",
+    hotelReason: "",
+    hotels: [],
     days: null
   })
 })

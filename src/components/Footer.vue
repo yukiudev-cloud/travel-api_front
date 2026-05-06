@@ -5,6 +5,9 @@
       <div>
         <p class="font-semibold text-gray-800">旅行プラン生成AI</p>
         <p class="text-xs mt-1">AIで旅行プランを自動生成するサービス</p>
+        <p class="text-xs text-gray-400 mt-4">
+          ※当サイトは楽天アフィリエイトプログラムを利用しています
+        </p>
       </div>
       <div class="flex flex-col gap-2">
         <router-link to="/">トップ</router-link>

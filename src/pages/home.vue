@@ -99,44 +99,25 @@
           </p>
 
           <div
-            v-for="area in hotelAreas"
-            :key="area"
             class="border rounded-xl p-4 bg-gray-50 hover:bg-gray-100 transition space-y-2"
           >
             
             <!-- エリア -->
             <div class="flex items-center justify-between">
               <p class="text-sm font-bold text-gray-900">
-                {{ area }}
+                {{ hotelArea }}
               </p>
             </div>
 
             <!-- 理由 -->
             <p class="text-xs text-gray-600 leading-relaxed">
-              {{ plan.find(p => p.hotel_area === area)?.hotel_reason }}
+              {{hotelReason}}
             </p>
 
             <!-- ボタン -->
             <div class="flex gap-2 pt-2">
-              
-              <a
-                :href="hotelLinks(area).rakuten"
-                target="_blank"
-                class="flex-1 text-center bg-red-500 hover:bg-red-600 text-white text-xs font-semibold py-2 rounded-lg transition"
-              >
-                楽天で探す
-              </a>
-
-              <a
-                :href="hotelLinks(area).booking"
-                target="_blank"
-                class="flex-1 text-center bg-blue-500 hover:bg-blue-600 text-white text-xs font-semibold py-2 rounded-lg transition"
-              >
-                Booking
-              </a>
-
+              <HotelList :hotels="hotels" />
             </div>
-
           </div>
         </div>
       </div>
@@ -150,12 +131,14 @@
   import Header from "../components/Header.vue"
   import { ref, computed, watch, onMounted } from "vue";
   import DayCard from "../components/DayCard.vue";
+  import HotelList from "../components/RakList.vue"
   import { nextTick } from "vue";
+  import { usePlanStore } from "../stores/store"
+  import { useToast } from "../composables/useToast"
+
   const API_URL = import.meta.env.VITE_API_URL
   const today = new Date().toISOString().split("T")[0];
   const loading = ref(false);
-  import { usePlanStore } from "../stores/store"
-  import { useToast } from "../composables/useToast"
 
   const { showToast } = useToast()
   //親にデータ渡す
@@ -181,6 +164,20 @@
     set: (v) => store.startDate = v
   })
 
+  const hotels = computed({
+    get: () => store.hotels,
+    set: (v) => store.hotels = v
+  })
+  const hotelArea = computed({
+    get: () => store.hotelArea,
+    set: (v) => store.hotelArea = v
+  })
+  const hotelReason = computed({
+    get: () => store.hotelReason,
+    set: (v) => store.hotelReason = v
+  })
+
+
   const days = computed(() => {
     if (!startDate.value || !endDate.value) return null;
 
@@ -193,8 +190,6 @@
   const dayText = computed(() => {
     return days.value ? `${days.value}日間` : "";
   });
-
-
 
   watch(
     () => plan.value,
@@ -219,7 +214,7 @@
     return JSON.parse(json)
   }
 
-  onMounted(() => {
+  onMounted( async () => {
     const params = new URLSearchParams(window.location.search)
     const encoded = params.get("data")
 
@@ -231,24 +226,17 @@
         store.startDate = decoded.s || ""
         store.endDate = decoded.e || ""
         store.plan = decoded.p || []
+        store.hotelArea = decoded.a || ""
+        store.hotelReason = decoded.r || ""
         store.days = days.value
-
+        if (!store.hotels || store.hotels.length === 0) {
+          await fetchHotels(hotelArea.value)
+        }
       } catch (e) {
         console.error("復元失敗", e)
       }
     }
   });
-
-  // ホテル生成
-  const resultRef = ref(null);
-  const hotelLinks = computed(() => (area) => {
-    const encoded = encodeURIComponent(area)
-
-    return {
-      rakuten: `https://travel.rakuten.co.jp/yado/?f_query=${encoded}&f_checkin=${startDate.value}&f_checkout=${endDate.value}`,
-      booking: `https://www.booking.com/searchresults.ja.html?ss=${encoded}&checkin=${startDate.value}&checkout=${endDate.value}`
-    }
-  })
 
   const hotelAreas = computed(() => {
     const areas = plan.value.map(p => p.hotel_area)
@@ -317,6 +305,9 @@
         store.destination = cleaned
         store.days = days.value
         store.plan = plan.value
+        store.hotelArea = data.hotel_area
+        store.hotelReason = data.hotel_reason
+        await fetchHotels(hotelArea.value)
         showToast("プラン生成 成功！！", "success");
         nextTick(() => {
           resultRef.value?.scrollIntoView({
@@ -333,4 +324,25 @@
       loading.value = false;
     }
   };
+
+  const fetchHotels = async (area) => {
+    try {
+      const res = await fetch(`${API_URL}/hotels`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          area
+        })
+      })
+
+      const data = await res.json()
+      hotels.value = data.rakAfURL
+      store.hotels = hotels.value
+
+    } catch (e) {
+      console.error(e)
+    }
+  }
 </script>

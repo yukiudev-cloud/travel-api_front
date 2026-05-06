@@ -42,7 +42,9 @@
       d: store.destination,
       s: store.startDate,
       e: store.endDate,
-      p: store.plan
+      p: store.plan,
+      a: store.hotelArea,
+      r: store.hotelReason
     }
 
   const encodePlan = (data) => {

@@ -137,6 +137,11 @@
   import { useToast } from "../composables/useToast"
 
   const API_URL = import.meta.env.VITE_API_URL
+
+  const R_APP_ID = import.meta.env.VITE_RAKUTEN_APP_ID
+  const R_AFF_ID = import.meta.env.VITE_RAKUTEN_AFF_ID
+  const R_ACS_KEY = import.meta.env.VITE_RAKUTEN_ACS_KEY
+
   const today = new Date().toISOString().split("T")[0];
   const loading = ref(false);
 
@@ -326,23 +331,24 @@
   };
 
   const fetchHotels = async (area) => {
-    try {
-      const res = await fetch(`${API_URL}/hotels`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          area
-        })
-      })
+    const url = `https://openapi.rakuten.co.jp/engine/api/Travel/KeywordHotelSearch/20170426`
 
-      const data = await res.json()
-      hotels.value = data.rakAfURL
-      store.hotels = hotels.value
+    const params = new URLSearchParams({
+      format: "json",
+      keyword: area,
+      hotelThumbnailSize: 2,
+      sort: "+roomCharge",
+      applicationId: R_APP_ID,
+      affiliateId: R_AFF_ID,
+      accessKey: R_ACS_KEY,
+      hits: 4
+    })
 
-    } catch (e) {
-      console.error(e)
-    }
+    const res = await fetch(`${url}?${params.toString()}`)
+    const data = await res.json()
+
+    console.log(data)
   }
+
+
 </script>

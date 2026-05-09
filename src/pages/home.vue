@@ -79,7 +79,9 @@
         >
           {{ loading ? "プラン思考中..." : "生成する" }}
         </button>
-
+        <p v-if="!loading" class="text-xs text-gray-400 mt-2 text-center">
+          ※生成には1分程度かかる場合があります
+        </p>
       </form>
       <!-- 結果 -->
       <div  v-if="plan.length > 0"  class="border rounded-2xl p-5 bg-white shadow-md space-y-4"> 
@@ -114,7 +116,6 @@
               {{hotelReason}}
             </p>
 
-            <!-- ボタン -->
             <div class="flex gap-2 pt-2">
               <HotelList :hotels="hotels" />
             </div>
@@ -123,13 +124,33 @@
       </div>
     </div>
   </div>
+  <!-- ローディングオーバーレイ -->
+  <div
+    v-if="loading"
+    class="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center"
+  >
+    <div class="bg-white rounded-2xl px-6 py-5 shadow-xl flex flex-col items-center gap-4">
 
+      <!-- ぐるぐる -->
+      <div
+        class="w-10 h-10 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin"
+      ></div>
+
+      <!-- テキスト -->
+      <p class="text-sm font-semibold text-gray-700">
+        AIが旅行プランを生成中...
+      </p>
+      <p class="text-xs text-gray-500 text-center">
+        1分程度かかる場合があります。
+      </p>
+    </div>
+  </div>
 </template>
 
 <script setup>
   import LZString from "lz-string"
   import Header from "../components/Header.vue"
-  import { ref, computed, watch, onMounted } from "vue";
+  import { ref, computed, watch, onMounted, onUnmounted } from "vue";
   import DayCard from "../components/DayCard.vue";
   import HotelList from "../components/RakList.vue"
   import { nextTick } from "vue";
@@ -148,6 +169,15 @@
   const today = new Date().toISOString().split("T")[0];
   const loading = ref(false);
   const resultRef = ref(null)
+
+  let controller = null
+
+  // 画面起動中はバックエンドを起こす
+  fetch(`${API_URL}/health`).catch(() => {})
+  let pingInterval = null
+  pingInterval = setInterval(() => {
+    fetch(`${API_URL}/health`).catch(() => {})
+  }, 4 * 60 * 1000)
 
   const { showToast } = useToast()
   //親にデータ渡す
@@ -246,6 +276,15 @@
       }
     }
   });
+  onUnmounted(() => {
+  if (controller) {
+    controller.abort()
+  }
+
+  if (pingInterval) {
+    clearInterval(pingInterval)
+  }
+});
 
   const hotelAreas = computed(() => {
     const areas = plan.value.map(p => p.hotel_area)
@@ -270,6 +309,8 @@
 
   // プラン生成
   const generatePlan = async () => {
+    if (loading.value) return
+
     const cleaned = cleanInput(destination.value);
     destination.value = cleaned;
     if (!cleaned) {
@@ -289,8 +330,14 @@
       showToast("7日以内で作成してください（精度と品質のため）", "error");
       return;
     }
+
+    if (controller) {
+      controller.abort()
+    }
+    controller = new AbortController()
+
     loading.value = true;
-    plan.value = [];
+    
     store.days = days.value
     try {
       const res = await fetch(`${API_URL}/generate-plan`, {
@@ -301,11 +348,12 @@
         body: JSON.stringify({
           destination: cleaned,
           days: days.value
-        })
+        }),
+        signal: controller.signal
       });
 
       const data = await res.json();
-
+      plan.value = [];
       if (!res.ok || data.error) {
         showToast(data.error || "サーバーエラー", "error");
         return;
@@ -327,6 +375,10 @@
       }
       
     } catch (e) {
+      if (e.name === "AbortError") {
+        console.log("通信キャンセル")
+        return
+      }
       showToast("通信エラー", "error");
       console.error(e);
     } finally {
@@ -370,6 +422,5 @@
     })
     store.hotels = hotels.value
   }
-
 
 </script>

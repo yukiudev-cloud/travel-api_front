@@ -3,13 +3,13 @@
 
     <!-- タイトル -->
     <p class="font-bold text-sm text-gray-900 line-clamp-2 mb-2">
-      {{ hotel.name_R }}
+      {{ hotel.name }}
     </p>
     <!-- 画像 + クレジット -->
     <div class="relative">
-      <a :href="hotel.url_R" target="_blank">
+      <a :href="hotel.url" target="_blank">
         <img
-          :src="hotel.img_R"
+          :src="hotel.img"
           alt="hotel image"
           class="w-full h-40 object-cover rounded-lg"
         />
@@ -21,11 +21,11 @@
     </div>
     <!-- 説明（軽め） -->
     <p class="text-xs text-gray-500 mb-3">
-      {{hotel.spe_R}}
+      {{hotel.spe}}
     </p>
     <div class="mt-auto flex gap-2">
       <a
-        :href="hotel.url_R"
+        :href="hotel.url"
         target="_blank"
         class="flex-1 text-center bg-emerald-500 hover:bg-emerald-600 text-white text-xs font-semibold py-2 rounded-lg transition"
       >

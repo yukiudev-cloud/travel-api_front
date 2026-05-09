@@ -144,6 +144,7 @@
 
   const today = new Date().toISOString().split("T")[0];
   const loading = ref(false);
+  const resultRef = ref(null)
 
   const { showToast } = useToast()
   //親にデータ渡す
@@ -314,12 +315,12 @@
         store.hotelReason = data.hotel_reason
         await fetchHotels(hotelArea.value)
         showToast("プラン生成 成功！！", "success");
-        nextTick(() => {
-          resultRef.value?.scrollIntoView({
-            behavior: "smooth",
-            block: "start"
-          });
-        });
+        await nextTick()
+
+        resultRef.value?.scrollIntoView({
+          behavior: "smooth",
+          block: "start"
+        })
       }
       
     } catch (e) {
@@ -346,7 +347,17 @@
 
     const res = await fetch(`${url}?${params.toString()}`)
     const data = await res.json()
+    hotels.value = data.hotels.map(h => {
+      const info = h.hotel[0].hotelBasicInfo
 
+      return {
+        name: info.hotelName,
+        url: info.hotelInformationUrl,
+        img: info.hotelImageUrl,
+        spe: info.hotelSpecial
+      }
+    })
+    store.hotels = hotels.value
     console.log(data)
   }
 

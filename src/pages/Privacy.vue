@@ -1,56 +1,84 @@
 <template>
-  <div class="max-w-3xl mx-auto p-6 bg-white text-gray-800">
-    
+  <div class="max-w-3xl mx-auto p-6 bg-white text-gray-800 leading-relaxed">
+
     <h1 class="text-2xl font-bold mb-6">プライバシーポリシー</h1>
 
     <p class="mb-4">
-      本サイト（以下、「当サイト」）は、ユーザーの個人情報の重要性を認識し、
-      以下の通りプライバシー情報の保護に努めます。
+      本サービス（以下、「当サービス」）は、ユーザーのプライバシー保護を重要視し、
+      以下の通り個人情報の取り扱いについて定めます。
     </p>
 
-    <h2 class="text-lg font-semibold mt-6 mb-2">1. 個人情報の利用目的</h2>
-    <p class="mb-4">
-      当サイトでは、お問い合わせやサービス利用時に、名前やメールアドレスなどの個人情報を入力いただく場合があります。
-      これらの情報は質問への回答や必要な情報を電子メール等でご連絡するために利用します。
+    <h2 class="text-lg font-semibold mt-6 mb-2">1. 収集する情報</h2>
+    <p class="mb-2">
+      当サービスでは、以下の情報を取得する場合があります。
     </p>
 
-    <h2 class="text-lg font-semibold mt-6 mb-2">2. 広告について</h2>
+    <ul class="list-disc pl-5 mb-4 space-y-1">
+      <li>旅行プラン生成のために入力された情報（行き先・日程など）</li>
+      <li>IPアドレス・ブラウザ情報などのアクセス情報</li>
+    </ul>
+
     <p class="mb-4">
-      当サイトでは、第三者配信の広告サービス（Google AdSense）を利用する予定です。
-      広告配信事業者はユーザーの興味に応じた広告を表示するため、
-      Cookie（クッキー）を使用することがあります。
+      氏名・メールアドレスなどの個人を特定できる情報は取得していません。
+    </p>
+
+    <h2 class="text-lg font-semibold mt-6 mb-2">2. 利用目的</h2>
+    <ul class="list-disc pl-5 mb-4 space-y-1">
+      <li>旅行プランの生成および表示</li>
+      <li>宿泊施設情報の検索・表示（楽天トラベルAPI）</li>
+      <li>サービス品質の改善</li>
+    </ul>
+
+    <h2 class="text-lg font-semibold mt-6 mb-2">3. 外部サービスの利用</h2>
+    <p class="mb-4">
+      当サービスでは、宿泊施設情報の取得のために
+      楽天トラベルAPIを利用しています。
+      この際、検索キーワード（例：東京・京都など）が外部サービスへ送信されます。
+    </p>
+
+    <h2 class="text-lg font-semibold mt-6 mb-2">4. 広告について</h2>
+    <p class="mb-4">
+      当サービスでは、Google AdSenseを利用して広告を表示しています。
+      広告配信事業者は、ユーザーの興味に応じた広告を表示するためにCookieを使用する場合があります。
     </p>
 
     <p class="mb-4">
-      Cookieを無効にする方法やGoogle AdSenseに関する詳細は、
-      Googleポリシーをご確認ください。
-    </p>
-    <a href="https://policies.google.com/technologies/ads" target="_blank" class="text-blue-500 underline">
-      Googleの広告ポリシー
-    </a>
-    <h2 class="text-lg font-semibold mt-6 mb-2">3. アクセス解析ツールについて</h2>
-    <p class="mb-4">
-      当サイトでは、サイト改善のためアクセス解析ツールを利用する場合があります。
-      このツールもCookieを使用し、匿名でトラフィックデータを収集します。
+      Cookieの使用を望まない場合は、ブラウザ設定により無効化することが可能です。
     </p>
 
-    <h2 class="text-lg font-semibold mt-6 mb-2">4. 免責事項</h2>
+    <h2 class="text-lg font-semibold mt-6 mb-2">5. 個人情報の第三者提供</h2>
     <p class="mb-4">
-      当サイトのコンテンツ・情報については、可能な限り正確な情報を提供するよう努めていますが、
-      正確性や安全性を保証するものではありません。
+      当サービスは、以下の場合を除き第三者へ情報を提供しません。
+    </p>
+
+    <ul class="list-disc pl-5 mb-4 space-y-1">
+      <li>法令に基づく場合</li>
+      <li>不正アクセスや不正利用の防止が必要な場合</li>
+      <li>外部API利用時（楽天トラベルAPI等）</li>
+    </ul>
+
+    <h2 class="text-lg font-semibold mt-6 mb-2">6. 免責事項</h2>
+    <p class="mb-4">
+      当サービスで提供される情報は、外部API等に基づいており、
+      正確性・最新性を保証するものではありません。
     </p>
 
     <p class="mb-4">
-      当サイトの利用によって生じた損害等については一切の責任を負いません。
+      本サービスの利用により発生した損害について、一切の責任を負いません。
     </p>
 
-    <h2 class="text-lg font-semibold mt-6 mb-2">5. お問い合わせ</h2>
+    <h2 class="text-lg font-semibold mt-6 mb-2">7. 改定について</h2>
     <p class="mb-4">
-      お問い合わせはサイト内フォームまたは指定の連絡先よりお願いいたします。
+      本ポリシーは、必要に応じて予告なく変更される場合があります。
+    </p>
+
+    <h2 class="text-lg font-semibold mt-6 mb-2">8. お問い合わせ</h2>
+    <p class="mb-4">
+      お問い合わせは、当サービス内のフォームまたは指定の方法にてお願いいたします。
     </p>
 
     <p class="text-sm text-gray-500 mt-10">
-      制定日：2026年4月28日
+      制定日：2026年5月9日
     </p>
 
   </div>

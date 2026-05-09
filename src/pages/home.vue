@@ -9,7 +9,7 @@
       <form @submit.prevent="generatePlan" class="space-y-3 mb-6">
         <!-- 行き先 -->
         <label for="destination">
-          行き先、プランなどを入力
+          行き先、目的などを入力
         </label>
 
         <input

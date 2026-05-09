@@ -139,7 +139,7 @@
 
   const API_URL = import.meta.env.VITE_API_URL
 
-  const TEST_MODE = import.meta.env.VITE_TEST_MODE
+  const TEST_MODE = import.meta.env.VITE_TEST_MODE === "true"
 
   const R_APP_ID = import.meta.env.VITE_RAKUTEN_APP_ID
   const R_AFF_ID = import.meta.env.VITE_RAKUTEN_AFF_ID

@@ -135,8 +135,11 @@
   import { nextTick } from "vue";
   import { usePlanStore } from "../stores/store"
   import { useToast } from "../composables/useToast"
+  import { mockHotels } from "../mocks/rHotelMock"
 
   const API_URL = import.meta.env.VITE_API_URL
+
+  const TEST_MODE = import.meta.env.VITE_TEST_MODE
 
   const R_APP_ID = import.meta.env.VITE_RAKUTEN_APP_ID
   const R_AFF_ID = import.meta.env.VITE_RAKUTEN_AFF_ID
@@ -332,6 +335,14 @@
   };
 
   const fetchHotels = async (area) => {
+    if (TEST_MODE) {
+      hotels.value = mockHotels
+      store.hotels = mockHotels
+
+      console.log("mock hotel")
+      return
+    }
+
     const url = `https://openapi.rakuten.co.jp/engine/api/Travel/KeywordHotelSearch/20170426`
 
     const params = new URLSearchParams({
@@ -358,7 +369,6 @@
       }
     })
     store.hotels = hotels.value
-    console.log(data)
   }
 
 

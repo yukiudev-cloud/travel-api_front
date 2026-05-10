@@ -55,6 +55,7 @@
 
 body {
   margin: 0;
+  @apply text-gray-800;
 }
 
 h1,

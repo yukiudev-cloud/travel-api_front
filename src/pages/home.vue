@@ -32,7 +32,8 @@
                   日程を入力
                 </p>
 
-                <div class="flex flex-col sm:flex-row sm:items-end justify-start sm:justify-center gap-3 w-full">
+                <div class="flex flex-col sm:flex-row sm:items-end sm:justify-center gap-3 w-full">
+
                   <!-- 出発 -->
                   <div class="flex-1 flex flex-col">
                     <p class="text-xs text-gray-500 mb-1">出発</p>
@@ -41,7 +42,7 @@
                       id="startDate"
                       v-model="startDate"
                       :min="today"
-                      class="w-full border rounded-lg p-2 bg-white text-black"
+                      class="w-full border rounded-lg bg-white text-black px-2 py-4 sm:px-3 sm:py-2 text-sm appearance-none"
                     />
                   </div>
 
@@ -57,7 +58,7 @@
                       id="endDate"
                       v-model="endDate"
                       :min="today"
-                      class="w-full border rounded-lg p-2 bg-white text-black"
+                      class="w-full border rounded-lg bg-white text-black px-2 py-4 sm:px-3 sm:py-2 text-sm appearance-none"
                     />
                   </div>
 

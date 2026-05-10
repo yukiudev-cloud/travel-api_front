@@ -1,5 +1,5 @@
 <template>
-  <div class="max-w-xl mx-auto p-6">
+  <div class="max-w-xl bg-white mx-auto p-6">
     <h1 class="text-2xl font-bold mb-4 text-gray-900">お問い合わせ</h1>
 
     <p class="text-gray-600 mb-6">

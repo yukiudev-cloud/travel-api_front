@@ -32,8 +32,7 @@
                   日程を入力
                 </p>
 
-                <div class="flex flex-col sm:flex-row sm:items-end sm:justify-center gap-3 w-full">
-
+                <div class="flex flex-col sm:flex-row sm:items-end justify-start sm:justify-center gap-3 w-full">
                   <!-- 出発 -->
                   <div class="flex-1 flex flex-col">
                     <p class="text-xs text-gray-500 mb-1">出発</p>

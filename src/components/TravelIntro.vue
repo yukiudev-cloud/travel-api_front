@@ -3,7 +3,7 @@
 
     <!-- ① キャッチ -->
     <div>
-      <h2 class="text-lg font-bold">
+      <h2 class="text-lg font-bold text-gray-900">
         AIで旅行プランを自動生成
       </h2>
       <p class="text-sm text-gray-600 mt-1">

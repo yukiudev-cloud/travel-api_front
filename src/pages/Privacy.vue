@@ -1,14 +1,14 @@
 <template>
   <div class="max-w-3xl mx-auto p-6 bg-white text-gray-800 leading-relaxed">
 
-    <h1 class="text-2xl font-bold mb-6">プライバシーポリシー</h1>
+    <h1 class="text-2xl font-bold mb-6 text-gray-900">プライバシーポリシー</h1>
 
     <p class="mb-4">
       本サービス（以下、「当サービス」）は、ユーザーのプライバシー保護を重要視し、
       以下の通り個人情報の取り扱いについて定めます。
     </p>
 
-    <h2 class="text-lg font-semibold mt-6 mb-2">1. 収集する情報</h2>
+    <h2 class="text-lg font-semibold mt-6 mb-2 text-gray-900">1. 収集する情報</h2>
     <p class="mb-2">
       当サービスでは、以下の情報を取得する場合があります。
     </p>
@@ -22,21 +22,21 @@
       氏名・メールアドレスなどの個人を特定できる情報は取得していません。
     </p>
 
-    <h2 class="text-lg font-semibold mt-6 mb-2">2. 利用目的</h2>
+    <h2 class="text-lg font-semibold mt-6 mb-2 text-gray-900">2. 利用目的</h2>
     <ul class="list-disc pl-5 mb-4 space-y-1">
       <li>旅行プランの生成および表示</li>
       <li>宿泊施設情報の検索・表示（楽天トラベルAPI）</li>
       <li>サービス品質の改善</li>
     </ul>
 
-    <h2 class="text-lg font-semibold mt-6 mb-2">3. 外部サービスの利用</h2>
+    <h2 class="text-lg font-semibold mt-6 mb-2 text-gray-900">3. 外部サービスの利用</h2>
     <p class="mb-4">
       当サービスでは、宿泊施設情報の取得のために
       楽天トラベルAPIを利用しています。
       この際、検索キーワード（例：東京・京都など）が外部サービスへ送信されます。
     </p>
 
-    <h2 class="text-lg font-semibold mt-6 mb-2">4. 広告について</h2>
+    <h2 class="text-lg font-semibold mt-6 mb-2 text-gray-900">4. 広告について</h2>
     <p class="mb-4">
       当サービスでは、Google AdSenseを利用して広告を表示しています。
       広告配信事業者は、ユーザーの興味に応じた広告を表示するためにCookieを使用する場合があります。
@@ -46,7 +46,7 @@
       Cookieの使用を望まない場合は、ブラウザ設定により無効化することが可能です。
     </p>
 
-    <h2 class="text-lg font-semibold mt-6 mb-2">5. 個人情報の第三者提供</h2>
+    <h2 class="text-lg font-semibold mt-6 mb-2 text-gray-900">5. 個人情報の第三者提供</h2>
     <p class="mb-4">
       当サービスは、以下の場合を除き第三者へ情報を提供しません。
     </p>
@@ -57,7 +57,7 @@
       <li>外部API利用時（楽天トラベルAPI等）</li>
     </ul>
 
-    <h2 class="text-lg font-semibold mt-6 mb-2">6. 免責事項</h2>
+    <h2 class="text-lg font-semibold mt-6 mb-2 text-gray-900">6. 免責事項</h2>
     <p class="mb-4">
       当サービスで提供される情報は、外部API等に基づいており、
       正確性・最新性を保証するものではありません。
@@ -67,12 +67,12 @@
       本サービスの利用により発生した損害について、一切の責任を負いません。
     </p>
 
-    <h2 class="text-lg font-semibold mt-6 mb-2">7. 改定について</h2>
+    <h2 class="text-lg font-semibold mt-6 mb-2 text-gray-900">7. 改定について</h2>
     <p class="mb-4">
       本ポリシーは、必要に応じて予告なく変更される場合があります。
     </p>
 
-    <h2 class="text-lg font-semibold mt-6 mb-2">8. お問い合わせ</h2>
+    <h2 class="text-lg font-semibold mt-6 mb-2 text-gray-900">8. お問い合わせ</h2>
     <p class="mb-4">
       お問い合わせは、当サービス内のフォームまたは指定の方法にてお願いいたします。
     </p>

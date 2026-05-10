@@ -2,10 +2,10 @@
   <div class="min-h-screen bg-gray-100 flex flex-col items-stretch sm:items-center p-3 sm:p-6">
     <div class="w-full max-w-3xl mx-auto bg-white rounded-2xl shadow-xl p-3 sm:p-6">
 
-      <h1 class="text-2xl sm:text-3xl font-bold mb-1 text-center">
+      <h1 class="text-2xl sm:text-3xl font-bold mb-1 text-center text-gray-900">
         旅行プラン生成
       </h1>
-      <div class="mb-3">
+      <div class="mb-3 ">
         <TravelIntro />
       </div>
 

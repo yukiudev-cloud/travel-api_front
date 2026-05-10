@@ -1,88 +1,94 @@
 <template>
   <div class="min-h-screen bg-gray-100 flex flex-col items-stretch sm:items-center p-3 sm:p-6">
     <div class="w-full max-w-3xl mx-auto bg-white rounded-2xl shadow-xl p-3 sm:p-6">
-      
-      <h1 class="text-2xl font-bold mb-6 text-center text-black">
+
+      <h1 class="text-2xl sm:text-3xl font-bold mb-1 text-center">
         旅行プラン生成
       </h1>
+      <div class="mb-3">
+        <TravelIntro />
+      </div>
 
-      <form @submit.prevent="generatePlan" class="space-y-3 mb-6">
-        <!-- 行き先 -->
-        <label for="destination">
-          行き先、目的などを入力
-        </label>
+      <div class="border rounded-2xl p-5 bg-white shadow space-y-4">
+        <form @submit.prevent="generatePlan" class="space-y-3 mb-6">
+          <!-- 行き先 -->
+          <div class="space-y-1">
+            <label for="destination" class="text-sm font-semibold text-gray-700">
+              行き先、目的などを入力
+            </label>
+          </div>
+          <input
+            v-model="destination"
+            id="destination"
+            placeholder="例：東京 / 美味しいものを食べたい"
+            class="w-full border rounded-lg p-2 bg-white text-black"
+          />
+          
+          <!-- 日数 -->
+          <div class="flex justify-center">
+            <div class="w-full max-w-md">
+              <div class="bg-gray-50 border rounded-xl p-4 space-y-3">
+                <p class="text-sm font-semibold text-gray-700 flex items-center gap-1">
+                  日程を入力
+                </p>
 
-        <input
-          v-model="destination"
-          id="destination"
-          placeholder="行き先"
-          class="w-full border rounded-lg p-2 bg-white text-black"
-        />
-        
-        <!-- 日数 -->
-        <div class="flex justify-center">
-          <div class="w-full max-w-md">
-            <div class="bg-gray-50 border rounded-xl p-4 space-y-3">
-              <p class="text-sm font-semibold text-gray-700 flex items-center gap-1">
-                日程を入力
-              </p>
+                <div class="flex flex-col sm:flex-row sm:items-end sm:justify-center gap-3 w-full">
 
-              <div class="flex flex-col sm:flex-row sm:items-end sm:justify-center gap-3 w-full">
+                  <!-- 出発 -->
+                  <div class="flex-1 flex flex-col">
+                    <p class="text-xs text-gray-500 mb-1">出発</p>
+                    <input
+                      type="date"
+                      id="startDate"
+                      v-model="startDate"
+                      :min="today"
+                      class="w-full border rounded-lg p-2 bg-white text-black"
+                    />
+                  </div>
 
-                <!-- 出発 -->
-                <div class="flex-1 flex flex-col">
-                  <p class="text-xs text-gray-500 mb-1">出発</p>
-                  <input
-                    type="date"
-                    id="startDate"
-                    v-model="startDate"
-                    :min="today"
-                    class="w-full border rounded-lg p-2 bg-white text-black"
-                  />
+                  <!-- 矢印 -->
+                  <div class="text-gray-400 text-xl pb-2 sm:block hidden">→</div>
+                  <div class="text-gray-400 text-xl text-center sm:hidden">↓</div>
+
+                  <!-- 帰宅 -->
+                  <div class="flex-1 flex flex-col">
+                    <p class="text-xs text-gray-500 mb-1">帰宅</p>
+                    <input
+                      type="date"
+                      id="endDate"
+                      v-model="endDate"
+                      :min="today"
+                      class="w-full border rounded-lg p-2 bg-white text-black"
+                    />
+                  </div>
+
                 </div>
-
-                <!-- 矢印 -->
-                <div class="text-gray-400 text-xl pb-2 sm:block hidden">→</div>
-                <div class="text-gray-400 text-xl text-center sm:hidden">↓</div>
-
-                <!-- 帰宅 -->
-                <div class="flex-1 flex flex-col">
-                  <p class="text-xs text-gray-500 mb-1">帰宅</p>
-                  <input
-                    type="date"
-                    id="endDate"
-                    v-model="endDate"
-                    :min="today"
-                    class="w-full border rounded-lg p-2 bg-white text-black"
-                  />
-                </div>
-
+                
+                <!-- 日数表示 -->
+                <p v-if="days" class="text-sm text-emerald-600 font-semibold">
+                  {{ days }}日間のプラン
+                </p>
+                <p v-if="!startDate || !endDate" class="text-xs text-gray-400">
+                  日付を選択してください
+                </p>
               </div>
-              
-              <!-- 日数表示 -->
-              <p v-if="days" class="text-sm text-emerald-600 font-semibold">
-                {{ days }}日間のプラン
-              </p>
-              <p v-if="!startDate || !endDate" class="text-xs text-gray-400">
-                日付を選択してください
-              </p>
             </div>
           </div>
-        </div>
 
-        <!-- ボタン -->
-        <button
-          ref="resultRef"
-          type="submit"
-          :disabled="loading"
-          class="w-full mt-4 bg-emerald-500 hover:bg-emerald-600 transition text-white font-semibold p-3 rounded-xl shadow"
-        >
-          {{ loading ? "プラン思考中..." : "生成する" }}
-        </button>
-        <p v-if="!loading" class="text-xs text-gray-400 mt-2 text-center">
-          ※生成には1分程度かかる場合があります
-        </p>
-      </form>
+          <!-- ボタン -->
+          <button
+            ref="resultRef"
+            type="submit"
+            :disabled="loading"
+            class="w-full mt-4 bg-emerald-500 hover:bg-emerald-600 transition text-white font-semibold p-3 rounded-xl shadow"
+          >
+            {{ loading ? "プラン思考中..." : "生成する" }}
+          </button>
+          <p v-if="!loading" class="text-xs text-gray-400 mt-2 text-center">
+            ※生成には1分程度かかる場合があります
+          </p>
+        </form>
+       </div> 
       <!-- 結果 -->
       <div  v-if="plan.length > 0"  class="border rounded-2xl p-5 bg-white shadow-md space-y-4"> 
         <div>
@@ -149,10 +155,14 @@
 
 <script setup>
   import LZString from "lz-string"
+
   import Header from "../components/Header.vue"
-  import { ref, computed, watch, onMounted, onUnmounted } from "vue";
+  import TravelIntro from "../components/TravelIntro.vue"
   import DayCard from "../components/DayCard.vue";
   import HotelList from "../components/RakList.vue"
+
+  import { ref, computed, watch, onMounted, onUnmounted } from "vue";
+
   import { nextTick } from "vue";
   import { usePlanStore } from "../stores/store"
   import { useToast } from "../composables/useToast"
